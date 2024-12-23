@@ -1,0 +1,21 @@
+.date-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.date-card h2 {
+    margin-top: 0; /* Remove the default margin */
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.date-card p {
+    margin: 8px 0 0; /* Add some space above and below the paragraph */
+    font-size: 1.2rem;
+    color: #555;
+}

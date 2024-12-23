@@ -1,0 +1,35 @@
+.homepage-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.main-content {
+    flex: 3; /* Take up 3/12 of the space */
+    padding-right: 20px; /* Add some space to the right */
+}
+
+.sidebar {
+    flex: 3; /* Take up 3/12 of the space */
+    display: flex; /* Display the items in a row */
+    flex-direction: column; /* Display the items in a column */
+    align-items: flex-end; /* Align the items to the start */
+}
+
+.weather-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Add some curve to the corners */
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a shadow */
+    width: 30%; /* Take up the full width */
+    margin-bottom: 20px;
+}
+
+.weather-card h2 {
+    margin-top: 0; /* Remove the default margin */
+}
+
+.weather-card p {
+    margin: 5px 0; /* Add some space above and below the paragraph */
+}

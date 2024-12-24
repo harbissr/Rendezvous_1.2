@@ -5,7 +5,7 @@ const EventList = () => {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
 
-  const organization_id = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
+    
 
 
   useEffect(() => {

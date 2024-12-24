@@ -30,7 +30,7 @@ const EventsPage = () => {
   return (
     <div className="events-page">
       <h1>My Events</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
       <CreateEvent onEventCreated={handleEventCreated} />
       <ul>
         {events.map((event) => (

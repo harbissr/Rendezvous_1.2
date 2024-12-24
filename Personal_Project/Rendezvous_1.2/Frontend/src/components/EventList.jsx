@@ -5,16 +5,24 @@ const EventList = () => {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
 
+  const organization_id = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
+
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('/api/v1/events/', {
+        const response = await axios.get(`https://www.eventbriteapi.com/v3/events/${event_id}/`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${organization_id}`,
             "Content-Type": "application/json",
           },
         });
-        setEvents(response.data); // Update the events state with the list of events
+        console.log(response.data); // Log the response data
+        if (Array.isArray(response.data)) {
+          setEvents(response.data); // Update the events state with the list of events
+        } else {
+          setError('Unexpected response format');
+        }
       } catch (error) {
         setError(error.response?.data?.error || 'An unexpected error occurred.');
       }

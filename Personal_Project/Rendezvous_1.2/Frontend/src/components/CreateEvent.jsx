@@ -1,97 +1,73 @@
 import React, { useState } from "react";
 import axios from "axios";
-import moment from "moment";
-// import "./CreateEvent.css";
 
 const CreateEvent = ({ onEventCreated }) => {
-    const [eventName, setEventName] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    // const [eventDate, setEventDate] = useState("");
-    const [currency, setCurrency] = useState("USD");
-    const [error, setError] = useState(null);
+  const [eventData, setEventData] = useState({
+    name: "",
+    start_time: "",
+    end_time: "",
+    currency: "",
+  });
+  const [error, setError] = useState(null);
 
-    const handleCreateEvent = async () => {
-        const organization_id = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
-        const privateToken = import.meta.env.VITE_EVENTBRITE_PRIVATE_TOKEN;
+  const handleChange = (e) => {
+    setEventData({ ...eventData, [e.target.name]: e.target.value });
+  };
 
-        const formattedStartTime = moment(startTime).utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
-        const formattedEndTime = moment(endTime).utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
-
-        try {
-            const response = await axios.post(`https://www.eventbriteapi.com/v3/organizations/${organization_id}/events/`, 
-            {
-                event: {
-                    name: {
-                        html: eventName,
-                    },
-                    start: {
-                        timezone: "America/New_York",
-                        utc: formattedStartTime,
-                    },
-                    end: {
-                        timezone: "America/New_York",
-                        utc: formattedEndTime,
-                    },
-                    privacty_setting: "locked",
-                    currency: currency,
-                },
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${privateToken}`,
-                    "Content-Type": "application/json",
-            },
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/v1/events/create/",
+        eventData,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`, // Include the token if required
+          },
         }
-        );
-            onEventCreated(response.data);
-            setEventName(""); 
-            setStartTime("");
-            setEndTime("");
-            // setEventDate("");
-            setCurrency("USD");
-        }catch (error) {
-            setError(error.response?.data?.error || "An unexpected error occurred.");
-        }
-    };
+      );
+      onEventCreated(response.data); // Pass the new event data back to the parent
+    } catch (err) {
+      setError("Failed to create event. Please try again.");
+    }
+  };
 
-    return (
-        <>
-        <div className="create-event">
-            <h2>Create Event</h2>
-            {error && <p className="error">{error}</p>}
-            <input
-                type="text"
-                placeholder="Event Name"
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
-            />
-
-            <input
-                type="datetime-local"
-                placeholder="Start Time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-            />
-
-            <input
-                type="datetime-local"
-                placeholder="End Time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-            />
-
-            <input
-                type="text"
-                placeholder="Currency"
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-            />
-
-            <button onClick={handleCreateEvent}>Create Event</button>
-        </div>
-        </>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <input
+        type="text"
+        name="name"
+        placeholder="Event Name"
+        value={eventData.name}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="datetime-local"
+        name="start_time"
+        value={eventData.start_time}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="datetime-local"
+        name="end_time"
+        value={eventData.end_time}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="text"
+        name="currency"
+        placeholder="Currency"
+        value={eventData.currency}
+        onChange={handleChange}
+        required
+      />
+      <button type="submit">Create Event</button>
+    </form>
+  );
 };
 
 export default CreateEvent;

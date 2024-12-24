@@ -24,13 +24,13 @@ from eventbrite_app.views import EventbriteAPI
 
 
 # Create your views here.
-class EventListCreateView(generics.ListCreateAPIView):
+class EventListView(generics.ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        return Event.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

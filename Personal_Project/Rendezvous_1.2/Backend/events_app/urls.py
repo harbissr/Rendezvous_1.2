@@ -6,11 +6,13 @@ from .views import (
     EventbriteSearchView,
     EventbriteDetailView,
     EventCreateView,
+    EventListView,
 )
 
 urlpatterns = [
+    path("", EventListView.as_view(), name="event-list"),  # Lists events
     path(
-        "create/", EventCreateView.as_view(), name="event-list"
+        "create/", EventCreateView.as_view(), name="event-create"
     ),  # Lists and creates events
     path(
         "<int:pk>/", EventDetailView.as_view(), name="event-detail"

@@ -5,6 +5,7 @@ import AuthorizationPage from './pages/AuthorizationPage';
 import Navbar from './components/Navbar';
 import './App.css';
 import EventsPage from './pages/EventsPage';
+import ProfilePage from './pages/ProfilePage';
 
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/" element={<AuthorizationPage setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
   );

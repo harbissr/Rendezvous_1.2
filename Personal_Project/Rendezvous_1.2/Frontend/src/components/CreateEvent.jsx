@@ -9,12 +9,11 @@ const CreateEvent = ({ onEventCreated }) => {
   const [endTime, setEndTime] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [error, setError] = useState(null);
-  let event_id = ''
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
     const organization_id = import.meta.env.VITE_EVENTBRITE_ORGANIZATION_ID;
-    const token = import.meta.env.VITE_EVENTBRITE_PRIVATE_TOKEN;
+    const privateToken = import.meta.env.VITE_EVENTBRITE_PRIVATE_TOKEN;
 
     // Format the start and end times to the required format
     const formattedStartTime = moment(startTime).utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
@@ -38,22 +37,52 @@ const CreateEvent = ({ onEventCreated }) => {
     };
 
     try {
-      const response = await axios.post(
+      const eventbriteResponse = await axios.post(
         `https://www.eventbriteapi.com/v3/organizations/${organization_id}/events/`,
         eventData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${privateToken}`,
             'Content-Type': 'application/json',
           },
         }
       );
-      onEventCreated(response.data); // Pass the new event data back to the parent
+      
+      
+    // Extract event details from Eventbrite response
+    const { name, start, end, currency } = eventbriteResponse.data;
+
+    // Prepare data for your backend API
+    const backendEventData = {
+        name: name.html,
+        start_time: start.utc,
+        end_time: end.utc,
+        currency: currency,
+        creator_email: "jj@ii.com",
+    };
+    console.log('Backend Event Data:', backendEventData);
+
+    // Make a POST request to your backend API to store the event details
+    const token = localStorage.getItem("token");
+    const backendResponse = await axios.post(
+        'http://127.0.0.1:8000/api/v1/events/create/',
+        backendEventData,
+        {
+            headers: {
+                Authorization: `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    console.log('Backend Response:', backendResponse.data);
+
+      onEventCreated(eventbriteResponse.data); // Pass the new event data back to the parent
       setEventName('');
       setStartTime('');
       setEndTime('');
       setCurrency('USD');
     } catch (err) {
+        console.error('Error:', err);
       setError("Failed to create event. Please try again.");
     }
   };

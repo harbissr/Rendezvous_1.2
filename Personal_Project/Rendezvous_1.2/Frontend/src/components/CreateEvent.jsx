@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import EventList from './EventList';
 
 const CreateEvent = ({ onEventCreated }) => {
   const [eventName, setEventName] = useState('');
@@ -8,6 +9,7 @@ const CreateEvent = ({ onEventCreated }) => {
   const [endTime, setEndTime] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [error, setError] = useState(null);
+  let event_id = ''
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();

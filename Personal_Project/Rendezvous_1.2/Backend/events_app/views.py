@@ -24,35 +24,60 @@ from eventbrite_app.views import EventbriteAPI
 
 
 # Create your views here.
-# class EventListCreateView(generics.ListCreateAPIView):  # noqa
-#     queryset = Event.objects.all()
-#     serializer_class = EventSerializer
-#     permission_classes = [IsAuthenticated]
+class EventListCreateView(generics.ListCreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
-#     def perform_create(self, serializer):
-#         serializer.save(user=self.request.user)
-class EventView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+# class EventView(APIView):
+#     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, *args, **kwargs):
-        organization_id = request.query_params.get("organization_id")
-        if not organization_id:
-            return Response({"error": "Organization ID is required"}, status=400)
+#     def get(self, request, *args, **kwargs):
+#         organization_id = request.query_params.get("organization_id")
+#         if not organization_id:
+#             return Response({"error": "Organization ID is required"}, status=400)
 
-        events = Event.objects.filter(organization_id=organization_id)
-        serializer = EventSerializer(events, many=True)
-        return Response(serializer.data)
+#         events = Event.objects.filter(organization_id=organization_id)
+#         serializer = EventSerializer(events, many=True)
+#         return Response(serializer.data)
 
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        data["user"] = request.user.id  # Associate event with the logged-in user
+#     def post(self, request, *args, **kwargs):
+#         data = request.data
+#         data["user"] = request.user.id  # Associate event with the logged-in user
+#         serializer = EventSerializer(data=data)
+
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=201)
+#         return Response(serializer.errors, status=400)
+
+
+class EventCreateView(APIView):
+    def post(self, request):
+        # Extract the email from the authenticated user
+        user = request.user
+        if not user.is_authenticated:
+            return Response(
+                {"error": "Authentication required"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        # Attach the creator's email to the incoming data
+        data = request.data.copy()
+        data["user"] = user.id
+
         serializer = EventSerializer(data=data)
-
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EventDetailView(generics.RetrieveUpdateDestroyAPIView):

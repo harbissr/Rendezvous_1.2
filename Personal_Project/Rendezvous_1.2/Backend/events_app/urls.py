@@ -5,17 +5,17 @@ from .views import (
     RSVPView,
     EventbriteSearchView,
     EventbriteDetailView,
-    EventView,
+    EventCreateView,
 )
 
 urlpatterns = [
-    path("events/", EventView.as_view(), name="event-list"),  # Lists and creates events
     path(
-        "events/<int:pk>/", EventDetailView.as_view(), name="event-detail"
+        "create/", EventCreateView.as_view(), name="event-list"
+    ),  # Lists and creates events
+    path(
+        "<int:pk>/", EventDetailView.as_view(), name="event-detail"
     ),  # Retrieves, updates, and deletes events
-    path(
-        "events/<int:event_id>/rsvp/", RSVPView.as_view(), name="rsvp"
-    ),  # RSVP to an event
+    path("<int:event_id>/rsvp/", RSVPView.as_view(), name="rsvp"),  # RSVP to an event
     path(
         "eventbrite/search/", EventbriteSearchView.as_view(), name="eventbrite-search"
     ),  # Search Eventbrite events

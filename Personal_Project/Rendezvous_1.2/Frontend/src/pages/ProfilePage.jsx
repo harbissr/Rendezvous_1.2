@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import DeleteButton from '../components/DeleteButton';
 
 const ProfilePage = () => {
     const [events, setEvents] = useState([]);
@@ -24,6 +25,10 @@ const ProfilePage = () => {
         fetchUserEvents();
     }, []);
 
+    const handleDeleteEvent = (eventId) => {
+        setEvents(events.filter((event) => event.id !== eventId));
+    }
+
     return (
         <div className="profile-page">
           <h1>Profile</h1>
@@ -34,6 +39,7 @@ const ProfilePage = () => {
               events.map((event) => (
                 <li key={event.id}>
                   {event.name} - {new Date(event.start_time).toLocaleString()} to {new Date(event.end_time).toLocaleString()}
+                  <DeleteButton eventId={event.id} onDelete={handleDeleteEvent} />
                 </li>
               ))
             ) : (

@@ -33,10 +33,10 @@ const Navbar = ({setIsAuthenticated}) => {
   return (
     <nav className="navbar">
       <h1>Rendezvous</h1>
-      <div className="navBarLinks">
+      <div className="navbar-container">
         <Link to="/homepage">Home</Link>
         <span className='separator'> | </span>
-        
+
         <Link to="/profile">Profile</Link>
         <span className='separator'> | </span>
 
@@ -68,5 +68,7 @@ const Navbar = ({setIsAuthenticated}) => {
     </nav>
   );
 };
+
+  
 
 export default Navbar;

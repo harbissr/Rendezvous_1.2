@@ -1,18 +1,15 @@
+
 .navbar {
+    position: relative;
+    top: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
-    padding: 10px;
-    background-color: gray;
-    border-bottom: 1px solid #333;
-    /* width: 100%;
-    background-color: gray;
-    color: black;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    box-sizing: border-box; */
-}
+  } 
 
 .navbar h1 {
     margin: 0;
@@ -21,54 +18,43 @@
 .navbarLinks {
     display: flex;
     align-items: center;
-    /* align-items: center; */
-    /* flex: 1; Take up all the remaining space */
-    /* width: 50%; */
-}
-
-.navbarLinks a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    outline: 2px solid black;
-    /* color: white;
-    text-decoration: none;
-    padding: 5px 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: relative; */
+    justify-content: space-between;
+    max-width: 120px;
+    margin: 0 auto;
+    padding: 0 20px;
+    margin-left: -10px; /* Shift links and button to the left */
 }
 
 .navbarLinks a::after {
     content: " | ";
-    color: wheat;
+    color: white;
     position: absolute;
     right: -10px;
 }
 
 .navbarLinks a:last-child::after {
-    content: ""; /* Remove the last separator */
+    content: ""; /*Remove the last separator*/
 }
 
-.navbarLinks button {
-    color: white;
-    text-decoration: none;
-    padding: 5px 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    outline: 2px solid black;
-}
 
 .navbarLinks a:hover, .navbarLinks button:hover {
-    background-color: #555;
+    background-color: #555; 
     border-radius: 4px;
     text-decoration: underline;
 }
 
 .separator {
-    color: #6c757d; /* Muted color for the separator */
+    color: white; /* Muted color for the separator */
     font-weight: normal;
     pointer-events: none; /* Makes the separator non-clickable */
+ }
+
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+    
+  .navbar a:hover {
+    text-decoration: underline;
   }

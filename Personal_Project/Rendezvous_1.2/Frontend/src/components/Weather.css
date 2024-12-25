@@ -12,7 +12,7 @@
 .sidebar {
     flex: 3; /* Take up 3/12 of the space */
     display: flex; /* Display the items in a row */
-    flex-direction: column; /* Display the items in a column */
+    flex-direction: row; /* Display the items in a column */
     align-items: flex-end; /* Align the items to the start */
 }
 

@@ -8,6 +8,7 @@ const CreateEvent = ({ onEventCreated }) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [currency, setCurrency] = useState('USD');
+  const [cost, setCost] = useState('');
   const [error, setError] = useState(null);
 
   const handleCreateEvent = async (e) => {
@@ -59,6 +60,7 @@ const CreateEvent = ({ onEventCreated }) => {
         end_time: end.utc,
         currency: currency,
         creator_email: "jj@ii.com",
+        cost: cost,
     };
     console.log('Backend Event Data:', backendEventData);
 
@@ -81,6 +83,7 @@ const CreateEvent = ({ onEventCreated }) => {
       setStartTime('');
       setEndTime('');
       setCurrency('USD');
+      setCost('');
     } catch (err) {
         console.error('Error:', err);
       setError("Failed to create event. Please try again.");
@@ -115,6 +118,12 @@ const CreateEvent = ({ onEventCreated }) => {
           placeholder="Currency"
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
+        />
+        <input
+            type='number'
+            placeholder='Cost in USD'
+            value={cost}
+            onChange={(e) => setCost(e.target.value)}
         />
         <button type="submit">Create Event</button>
       </form>

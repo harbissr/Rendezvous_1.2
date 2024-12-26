@@ -8,13 +8,15 @@ const Weather = () => {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [zipCode, setZipCode] = useState('');
 
-  useEffect(() => {
-    const fetchWeather = async () => {
+    const fetchWeather = async (zip) => {
+        setLoading(true);
+        setError(null);
       try {
         const response = await axios.get(`https://api.tomorrow.io/v4/weather/realtime`, {
             params: {
-                location: "38.785809, -77.187248",
+                location: zip,
                 units: "imperial",
                 apikey: import.meta.env.VITE_WEATHER_KEY,
             },
@@ -22,6 +24,7 @@ const Weather = () => {
                 Accept: "application/json",
             },
         });
+        console.log('Weather response:', response.data)
         setWeather(response.data);
       } catch (err) {
         setError(err?.message || "An unexpected error has occured.");
@@ -30,24 +33,32 @@ const Weather = () => {
       }
     };
 
-    fetchWeather();
-  }, []);
-
-  if (error) return <div>Error: {error}</div>;
-  if (loading) return <div>Loading...</div>;
-
-  const temperature = weather?.data?.values?.temperature;
-  const precipitationProbability = weather?.data?.values?.precipitationProbability;
+    const handleFetchWeather = () => {
+        if (zipCode) {
+            fetchWeather(zipCode);
+        } else {
+            setError('Please enter a valid zip code.')
+        }
+    };
 
   return (
     <>
     <div className="weather-card">
         <h2>Weather</h2>
-        {temperature !== undefined && (
-            <p>Temperature: {temperature} F</p>
-        )}
-        {precipitationProbability !== undefined && (
-            <p>Precipitation Probability: {precipitationProbability}%</p>
+        <input 
+            type="text"
+            placeholder="Enter Zip Code"
+            value={zipCode}
+            onChange={(e) => setZipCode(e.target.value)}
+        />
+        <button onClick={handleFetchWeather}>Get Weather</button>
+        {loading && <p>Loading...</p>}
+        {error && <p className="error">{error}</p>}
+        {weather && (
+            <div>
+                <p>Temerature: {weather.data.values.temperature} F</p>
+                <p>Precipation Probability: {weather.data.values.precipitationProbability}%</p>
+            </div>
         )}
     </div>
     </>

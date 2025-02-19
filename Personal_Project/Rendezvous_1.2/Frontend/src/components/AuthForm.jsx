@@ -49,6 +49,10 @@ const AuthForm = ({setIsAuthenticated}) => {
 return (
     <>
     <div className="auth-form">
+      <video autoPlay loop muted playsInline classname="background_video">
+        <source src="/Users/Shaun/Desktop/codePlatoon/Personal_Project/Rendezvous_1.2/Frontend/src/assets/background_video_footage.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <form onSubmit={handleSubmit}>
         <input
           type="email"

@@ -16,13 +16,6 @@ from rest_framework.status import (
 from eventbrite_app.views import EventbriteAPI
 
 
-# @api_view(["GET"])
-# def get_user_events(request, user_id):
-#     events = Event.objects.filter(user_id=user_id)
-#     serializer = EventSerializer(events, many=True)
-#     return Response({"events": serializer.data})
-
-
 # Create your views here.
 class EventListView(generics.ListAPIView):
     queryset = Event.objects.all()
@@ -34,29 +27,6 @@ class EventListView(generics.ListAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-# class EventView(APIView):
-#     permission_classes = [IsAuthenticatedOrReadOnly]
-
-#     def get(self, request, *args, **kwargs):
-#         organization_id = request.query_params.get("organization_id")
-#         if not organization_id:
-#             return Response({"error": "Organization ID is required"}, status=400)
-
-#         events = Event.objects.filter(organization_id=organization_id)
-#         serializer = EventSerializer(events, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request, *args, **kwargs):
-#         data = request.data
-#         data["user"] = request.user.id  # Associate event with the logged-in user
-#         serializer = EventSerializer(data=data)
-
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=201)
-#         return Response(serializer.errors, status=400)
 
 
 class EventCreateView(APIView):

@@ -1,5 +1,4 @@
 import React from "react";
-import "./HomePage.css";
 import Weather from "../components/Weather";
 import DateCard from "../components/DateCard";
 

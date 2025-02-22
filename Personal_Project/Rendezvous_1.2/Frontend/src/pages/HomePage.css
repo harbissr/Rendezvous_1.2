@@ -1,7 +1,0 @@
-.main-page-contents {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    color: gray; /* Gray text */
-}

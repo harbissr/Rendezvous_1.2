@@ -49,10 +49,11 @@ const AuthForm = ({setIsAuthenticated}) => {
 return (
     <>
     <div className="auth-form">
-      <video autoPlay loop muted playsInline classname="background_video">
-        <source src="/Users/Shaun/Desktop/codePlatoon/Personal_Project/Rendezvous_1.2/Frontend/src/assets/background_video_footage.mp4" type="video/mp4" />
+      <video autoPlay loop muted playsInline className="background_video">
+        <source src="/assets/background_video_footage.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+      <h1 className="app_title">RENDEZVOUS</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -69,11 +70,12 @@ return (
         <button type="submit" disabled={loading}>
           {isLogin ? "Login" : "Sign Up"}
         </button>
-      </form>
-      {errorMessage && <p className="error">{errorMessage}</p>} 
-      <button onClick={() => setIsLogin(!isLogin)}>
+        <button onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Switch to Sign Up" : "Switch to Login"}     
         </button> 
+      </form>
+      {errorMessage && <p className="error">{errorMessage}</p>} 
+      
     </div>
     </>
   );

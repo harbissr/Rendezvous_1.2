@@ -9,16 +9,18 @@ const Weather = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [zipCode, setZipCode] = useState('');
+  const [countryCode, setCountryCode] = useState('');
 
-    const fetchWeather = async (zip) => {
+    const fetchWeather = async (lat, lon) => {
         setLoading(true);
         setError(null);
       try {
-        const response = await axios.get(`https://api.tomorrow.io/v4/weather/realtime`, {
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
             params: {
-                location: zip,
+                lat: lat,
+                lon: lon,
                 units: "imperial",
-                apikey: import.meta.env.VITE_WEATHER_KEY,
+                appid: import.meta.env.OPEN_WEATHER_MAP,
             },
             headers: {
                 Accept: "application/json",
@@ -33,11 +35,30 @@ const Weather = () => {
       }
     };
 
+    const fetchCoordinates = async (zip) => {
+      try{
+        const response = await axios.get(`http://api.openweathermap.org/geo/1.0/zip`, {
+          params: {
+            zip: zip,
+            country_code: country_code,
+            appid: import.meta.env.OPEN_WEATHER_MAP,
+          },
+        });
+        const {lat, lon} = response.data;
+        fetchWeather(lat, lon);
+      } catch (err) {
+        setError("Failed to fetch coordinates.");
+        setLoading(false)
+      }
+    };
+
     const handleFetchWeather = () => {
         if (zipCode) {
-            fetchWeather(zipCode);
+            fetchCoordinates(zipCode);
+        } if (countryCode) {
+          fetchCoordinates(countryCode);
         } else {
-            setError('Please enter a valid zip code.')
+          setError('Please enter a valid zip code.')
         }
     };
 
@@ -52,12 +73,19 @@ const Weather = () => {
             onChange={(e) => setZipCode(e.target.value)}
         />
         <button onClick={handleFetchWeather}>Get Weather</button>
+        <input 
+            type="text"
+            placeholder="Enter Country Code"
+            value={countryCode}
+            onChange={(e) => setCountryCode(e.target.value)}
+        />
+        <button onClick={handleFetchWeather}>Get Country</button>
         {loading && <p>Loading...</p>}
         {error && <p className="error">{error}</p>}
         {weather && (
             <div>
-                <p>Temerature: {weather.data.values.temperature} F</p>
-                <p>Precipation Probability: {weather.data.values.precipitationProbability}%</p>
+                <p>Temerature: {weather.main.temp} F</p>
+                <p>Precipation Probability: {weather.weather[0].description}</p>
             </div>
         )}
     </div>

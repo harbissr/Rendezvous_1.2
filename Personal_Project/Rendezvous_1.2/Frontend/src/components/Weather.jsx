@@ -9,18 +9,16 @@ const Weather = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [zipCode, setZipCode] = useState('');
-  const [countryCode, setCountryCode] = useState('');
 
-    const fetchWeather = async (lat, lon) => {
+    const fetchWeather = async (zip) => {
         setLoading(true);
         setError(null);
       try {
         const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
             params: {
-                lat: lat,
-                lon: lon,
+                zip: zip,
                 units: "imperial",
-                appid: import.meta.env.OPEN_WEATHER_MAP,
+                appid: import.meta.env.VITE_OPEN_WEATHER_MAP,
             },
             headers: {
                 Accept: "application/json",
@@ -35,28 +33,26 @@ const Weather = () => {
       }
     };
 
-    const fetchCoordinates = async (zip) => {
-      try{
-        const response = await axios.get(`http://api.openweathermap.org/geo/1.0/zip`, {
-          params: {
-            zip: zip,
-            country_code: country_code,
-            appid: import.meta.env.OPEN_WEATHER_MAP,
-          },
-        });
-        const {lat, lon} = response.data;
-        fetchWeather(lat, lon);
-      } catch (err) {
-        setError("Failed to fetch coordinates.");
-        setLoading(false)
-      }
-    };
+    // const fetchCoordinates = async (zip) => {
+    //   try{
+    //     const response = await axios.get(`http://api.openweathermap.org/geo/1.0/zip`, {
+    //       params: {
+    //         zip: zip,
+    //         country_code: country_code,
+    //         appid: import.meta.env.OPEN_WEATHER_MAP,
+    //       },
+    //     });
+    //     const {lat, lon} = response.data;
+    //     fetchWeather(lat, lon);
+    //   } catch (err) {
+    //     setError("Failed to fetch coordinates.");
+    //     setLoading(false)
+    //   }
+    // };
 
     const handleFetchWeather = () => {
         if (zipCode) {
-            fetchCoordinates(zipCode);
-        } if (countryCode) {
-          fetchCoordinates(countryCode);
+            fetchWeather(zipCode);
         } else {
           setError('Please enter a valid zip code.')
         }
@@ -73,13 +69,6 @@ const Weather = () => {
             onChange={(e) => setZipCode(e.target.value)}
         />
         <button onClick={handleFetchWeather}>Get Weather</button>
-        <input 
-            type="text"
-            placeholder="Enter Country Code"
-            value={countryCode}
-            onChange={(e) => setCountryCode(e.target.value)}
-        />
-        <button onClick={handleFetchWeather}>Get Country</button>
         {loading && <p>Loading...</p>}
         {error && <p className="error">{error}</p>}
         {weather && (

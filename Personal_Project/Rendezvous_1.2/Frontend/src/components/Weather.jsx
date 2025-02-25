@@ -33,23 +33,6 @@ const Weather = () => {
       }
     };
 
-    // const fetchCoordinates = async (zip) => {
-    //   try{
-    //     const response = await axios.get(`http://api.openweathermap.org/geo/1.0/zip`, {
-    //       params: {
-    //         zip: zip,
-    //         country_code: country_code,
-    //         appid: import.meta.env.OPEN_WEATHER_MAP,
-    //       },
-    //     });
-    //     const {lat, lon} = response.data;
-    //     fetchWeather(lat, lon);
-    //   } catch (err) {
-    //     setError("Failed to fetch coordinates.");
-    //     setLoading(false)
-    //   }
-    // };
-
     const handleFetchWeather = () => {
         if (zipCode) {
             fetchWeather(zipCode);
@@ -74,7 +57,8 @@ const Weather = () => {
         {weather && (
             <div>
                 <p>Temerature: {weather.main.temp} F</p>
-                <p>Precipation Probability: {weather.weather[0].description}</p>
+                <p>Weather Conditions: {weather.weather[0].description}</p>
+                <p>Humidity: {weather.main.humidity} %</p>
             </div>
         )}
     </div>
